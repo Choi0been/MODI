@@ -131,7 +131,7 @@ Pleos Vehicle SDK(`ai.pleos.playground:Vehicle:2.3.1`)는 기본 빌드에서 �
 
 ## APK 및 저장소
 
-- 디버그 APK: `app/build/outputs/apk/debug/app-debug.apk`
+- APK 파일 위치 : `apk/iRO_MODI_release.apk`
 - GitHub 저장소: [https://github.com/Choi0been/MODI](https://github.com/Choi0been/MODI)
 
 APK 파일은 `assembleDebug`가 성공한 뒤 위 경로에 생성됩니다.
