@@ -3,6 +3,12 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose") version "2.4.21"
 }
 
+composeCompiler {
+    // AGP's built-in Kotlin requests an unpublished 2.2.10 mapping tool.
+    // Keep R8 enabled while omitting only Compose group-key deobfuscation entries.
+    includeComposeMappingFile.set(false)
+}
+
 android {
     namespace = "com.ssafy.modi"
     compileSdk {

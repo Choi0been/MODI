@@ -65,3 +65,73 @@ MODI는 Pleos가 탑재된 차량을 운행하는 모든 운전자를 대상으�
 - **운전과 휴식에 집중:** 운전 중에는 주행에, 정차 후에는 휴식에 집중할 수 있도록 돕습니다.
 - **개인화된 실내 환경:** 사용자가 저장한 설정을 바탕으로 선호하는 온도와 시트 포지션을 제공합니다.
 - **상황에 맞는 자동 제어:** 주행 환경, 휴식 여부, 계절에 따라 필요한 실내 장치를 조절합니다.
+
+## 실행 방법
+
+1. [GitHub 저장소](https://github.com/Choi0been/MODI)를 클론한 뒤 Android Studio에서 프로젝트 루트를 엽니다.
+2. Gradle Sync를 실행하고 `Pleos Connect v2.1.0` AVD를 시작합니다.
+3. 실행 구성에서 `app` 모듈과 실행 중인 Pleos Connect 에뮬레이터를 선택한 뒤 **Run**을 실행합니다.
+4. 앱 오른쪽 위의 **시뮬레이션** 메뉴에서 제공되는 차량 상황을 선택해 주요 기능을 확인합니다.
+
+Windows 터미널에서 APK만 빌드하려면 프로젝트 루트에서 다음 명령을 실행합니다.
+
+```powershell
+.\gradlew.bat :app:assembleDebug
+```
+
+## 테스트 환경 및 필요한 설정
+
+### 개발·빌드 환경
+
+| 항목 | 설정 |
+| --- | --- |
+| Android 모듈 | `:app` |
+| 애플리케이션 ID | `com.ssafy.modi` |
+| Android Gradle Plugin | 9.5.1 |
+| Gradle | 9.6.0 |
+| Kotlin Compose Plugin | 2.4.21 |
+| Java 소스/타깃 호환성 | Java 11 |
+| `compileSdk` / `targetSdk` / `minSdk` | 37 / 37 / 34 |
+
+의존성 다운로드를 위해 Google Maven, Maven Central 및 Pleos Playground Maven 저장소에 접근할 수 있어야 합니다. 현재 앱은 차량 상태와 제어 동작을 로컬 데이터로 시뮬레이션하며 실제 차량, GPS, 날씨 및 대기질 API에는 연결하지 않습니다.
+
+Pleos Vehicle SDK(`ai.pleos.playground:Vehicle:2.3.1`)는 기본 빌드에서 비활성화되어 있습니다. 검증된 SDK 배포 환경에서만 다음 옵션으로 활성화하며, 저장소 접근 권한과 SDK 지원 범위를 별도로 확인해야 합니다.
+
+```powershell
+.\gradlew.bat :app:assembleDebug -PpleosSdkEnabled=true
+```
+
+### 테스트 실행
+
+로컬 단위 테스트는 다음 명령으로 실행합니다.
+
+```powershell
+.\gradlew.bat :app:testDebugUnitTest
+```
+
+단위 테스트는 자동화 우선순위와 원래 값 복원, 운전자 수동 변경 유지, P단·정차 조건, 우천 시 창문 제어, 냉방 종료 조건 및 위치 신호 유실 시 제한 시간 동작을 검증합니다.
+
+## Pleos Connect 에뮬레이터
+
+개발 및 화면 검증에는 다음 AVD를 사용했습니다.
+
+| 항목 | 설정 |
+| --- | --- |
+| 에뮬레이터 | Pleos Connect v2.1.0 |
+| AVD ID | `Pleos_Connect_v2.1.0` |
+| 기기 프로필 | `Pleos_Connect_v2_0` (42dot) |
+| 시스템 이미지 | Android Automotive, Android 35 Extension 15, x86_64 |
+| 메인 화면 | 2560 × 1440 px, 160 dpi, 가로 방향 |
+| 보조 화면 (`display6`) | 400 × 600 px, 120 dpi |
+| CPU / RAM | 4 cores / 2048 MB |
+| 데이터 파티션 | 10 GB |
+| GPU | 활성화 (`auto`) |
+| 입력 및 센서 | 키보드·GPS·오디오 입력 활성화, 카메라 없음 |
+| Google Play Store | 비활성화 |
+
+## APK 및 저장소
+
+- 디버그 APK: `app/build/outputs/apk/debug/app-debug.apk`
+- GitHub 저장소: [https://github.com/Choi0been/MODI](https://github.com/Choi0been/MODI)
+
+APK 파일은 `assembleDebug`가 성공한 뒤 위 경로에 생성됩니다.
